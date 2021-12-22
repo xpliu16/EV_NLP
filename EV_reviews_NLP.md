@@ -61,7 +61,7 @@ car_makes_unknown2 = {x for x in car_makes_unknown
 print("Suggested car makes to add to NER:")
 print(car_makes_unknown2)
 ```
-<img src="car_makes_add.png" alt="Car makes to add as named entities">
+<img src="car_makes_add2.png" alt="Car makes to add as named entities">
 ```
 ruler = nlp.add_pipe("entity_ruler")
 for cm in list(car_makes_unknown2):
@@ -78,7 +78,7 @@ For the second part of the project, I wanted to extract key information about wh
 
 1.	Most common combinations of adjacent words (bigrams, trigrams, and four-grams). These were combined into a single list, after removing bigrams that were subsets of trigrams, etc.
 <img src="top_grams.png" alt="Top n-grams">
-2.	Most common single-word nouns (excluding words that were components of n-gram combinations): 
+2.	Most common singular single-word nouns (excluding words that were components of n-gram combinations): 
 <img src="top_nouns.png" alt="Top informative nouns"> 
 (As you can see, common words were not necessarily informative, such as “vehicle”)
 3.	Top 20 comparative adjectives:
