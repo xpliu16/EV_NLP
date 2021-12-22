@@ -77,7 +77,7 @@ Other ideas I considered but didn’t implement:
 For the second part of the project, I wanted to extract key information about what properties of the cars were important to the reviewers. After excluding stopwords and car model words, keywords were created by looking at:
 
 1.	Most common combinations of adjacent words (bigrams, trigrams, and four-grams). These were combined into a single list, after removing bigrams that were subsets of trigrams, etc.
-<img src="top_grams.png" alt="Top n-grams">
+<img src="top_grams2.png" alt="Top n-grams">
 2.	Most common singular single-word nouns (excluding words that were components of n-gram combinations): 
 <img src="top_nouns.png" alt="Top informative nouns"> 
 (As you can see, common words were not necessarily informative, such as “vehicle”)
