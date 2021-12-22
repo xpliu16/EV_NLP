@@ -1,3 +1,7 @@
+---
+title: Analyzing reviews of electric and hybrid vehicles using NLP
+---
+
 ## Gaining insight from reviews of new electric vehicle models 
 
 President Biden recently announced an ambitious target for 50% of all new vehicles sold to be zero-emissions vehicles by 2030. In order to achieve such widespread adoption of green cars, it is necessary to understand consumer choices and priorities in electric and hybrid vehicle purchases, and to use these insights to inform design decisions for the next generation of vehicles. I scraped car reviews from [Green Car Reports](http://www.greencarreports.com) to gather relevant text for a list of car models and performed natural language processing on it to extract informative excerpts.
