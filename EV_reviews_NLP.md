@@ -45,9 +45,9 @@ Pretty impressive for a freely available tool!
 
 At this point, I was feeling optimistic and excited, but when I ran the code over the entire list of reviews, I immediately ran into issues. For the “Lucid Air”, neither “Lucid” nor “Air” were identified as named entities (a reason to pick searchable and non-generic names, but then no one is criticizing the MacBook Air). For the “Polestar 2”, it was initially unclear to me what the correct answer should be – was “2” the model name, and how could named entity analysis identify that? What about all the variants following the model name, such as “single-motor,” “dual-motor,” “hybrid,” “plug-in hybrid”? 
 
-The first strategy to improve things was to try a larger language model (i.e., going from ‘en_core_web_sm’ to ‘en_core_web_lg’). The latter was almost 800 MB and took 2 min to download, but these may be acceptable since this is not a real-time application with a massive amount of data. The large model was able to pick up a larger number of the models as ‘PRODUCT’ entities, but because those often included the make of the vehicle, we often lost identification of the make as an ‘ORG’ entity. Furthermore, this effect was inconsistent and unpredictable. For instance, “Santa Fe Hybrid” was conversely labeled as an ‘ORG’ entity. This appears to be a nested / overlapping span named entity recognition problem as well as a labeling issue. I also tested the NLTK library, but it tagged the “Hyundai Santa Fe Hybrid” as a ‘PERSON’ entity and “SUVs” as an ‘ORG’ entity. 
+The first strategy to improve things was to try a larger language model (i.e., going from ‘en_core_web_sm’ to ‘en_core_web_lg’). The latter was almost 800 MB and took 2 min to download, but these may be acceptable since this is not a real-time application with a massive amount of data. The large model was able to pick up a larger number of the models as ‘PRODUCT’ entities, but because those often included the make of the vehicle, we often lost identification of the make as an ‘ORG’ entity. Furthermore, this effect was inconsistent and unpredictable. For instance, “Santa Fe Hybrid” was labeled as an ‘ORG’ entity. This appears to be a nesting / overlapping span problem. I also tested the NLTK library, but it tagged the “Hyundai Santa Fe Hybrid” as a ‘PERSON’ entity and “SUVs” as an ‘ORG’ entity. 
 
-<img src="Large_small.png" alt="Small versus large Spacy language models" width="770">
+<img src="Large_small2.png" alt="Small versus large Spacy language models" width="770">
 
 For this particular website, the vehicle make was typically the first token after the model year (I checked that “Mercedes-Benz” tokenizes as one word). Simply taking the first token performed great in comparison. Then, I looked for either ‘ORG’ or ‘PRODUCT’ entities in the title that were not equal to the vehicle make, which were presumably the model names, and removed the vehicle make if it was nested within.
 
@@ -75,37 +75,38 @@ for cm in list(car_makes_unknown2):
 At this point, it performed fairly well on the list of car reviews we had.
 
 Other ideas I considered but didn’t implement:
-1)	This approach was particular to this website’s title pattern. To create a more generalizable solution for vehicle model identification, it may make sense to work off of a list or table of cars scraped from another source, if such a comprehensive list could be obtained.   
 
-2)	Look for the pattern in the text of the review article itself – e.g., the car model may appear as the most frequent capitalized word(s). However, there may not be enough quantity of data here.
+1)	 This approach was particular to this website’s title pattern. To create a more generalizable solution for vehicle model identification, it may make sense to work off of a list or table of cars scraped from another source, if such a comprehensive list could be obtained.   
 
-3)	Particular contexts are likely to surround the name of car models (e.g., “The all new…”). Using known car names, we can find those contexts, perhaps by training a neural network, and then use those contexts to find more car names. Perhaps doing so in an iterative manner could help build a large set of car names. 
+2)	 Look for the pattern in the text of the review article itself – e.g., the car model may appear as the most frequent capitalized word(s). However, there may not be enough quantity of data here.
+
+3)	 Particular contexts are likely to surround the name of car models (e.g., “The all new…”). Using known car names, we can find those contexts, perhaps by training a neural network, and then use those contexts to find more car names. Perhaps doing so in an iterative manner could help build a large set of car names. 
 
 ### Detecting key terms and extracting information related to those terms
 
 For the second part of the project, I wanted to extract key information about what properties of the cars were important to the reviewers. After excluding stopwords and car model words, keywords were created by looking at:
 
-1)	Most common combinations of adjacent words (bigrams, trigrams, and four-grams). These were combined into a single list, after removing bigrams that were subsets of trigrams, etc.
+1)	 Most common combinations of adjacent words (bigrams, trigrams, and four-grams). These were combined into a single list, after removing bigrams that were subsets of trigrams, etc.
 
 <img src="top_grams.png" alt="Top n-grams" width="315">
 
-2)	Most common singular single-word nouns (excluding words that were components of n-gram combinations): 
+2)	 Most common singular single-word nouns (excluding words that were components of n-gram combinations): 
 
 <img src="top_nouns.png" alt="Top informative nouns" width="157">  
 
 (As you can see, common words were not necessarily informative, such as “vehicle”)
 
-3)	Top 20 comparative adjectives:
+3)	 Top 20 comparative adjectives:
 
 <img src="top_JJR.png" alt="Top comparative adjectives" width="157">
 
 (Daft Punk?!)
 
-4)	Top 10 comparative adverbs:
+4)	 Top 10 comparative adverbs:
 
 <img src="top_RBR.png" alt="Top comparative adverbs" width="157">
 
-5)	Words associated with positive or negative sentiment (according to [Bing Liu’s Opinion Lexicon](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html)).
+5)	 Words associated with positive or negative sentiment (according to [Bing Liu’s Opinion Lexicon](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html)).
 
 I then excerpted sentences that contained any of the above terms to produce a summary:
 
